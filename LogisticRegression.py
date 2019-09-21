@@ -1,33 +1,32 @@
 import numpy as np
 import math
 class LogisticRegression:
-    def __init__(self, training_data, learning_rate, gradient_descent_iterations):
-        self.X_features = training_data[:,0:-1]
-        self.Y_quality = training_data[:, -1]
-        self.learning_rate = learning_rate
-        self.gradient_descent_iterations = gradient_descent_iterations
+    def __init__(self, X_features, Y_quality):
+        # split the training data
+        self.X_features = X_features
+        self.Y_quality = Y_quality
         self.weight = np.full((self.X_features.shape[1], 1), 0)
 
-    def fit(self):
-        for it in range(self.gradient_descent_iterations):
+    def fit(self, learning_rate, gradient_descent_iterations):
+        for it in range(gradient_descent_iterations):
+            weight_old = self.weight
             for i in range(self.X_features.shape[0]):
-                sigma = np.matmul(np.transpose(self.weight), np.transpose(self.X_features[i]))
+                sigma = np.matmul(np.transpose(weight_old), np.transpose(self.X_features[i]))
                 self.weight = np.add(
                     self.weight,
-                    (self.learning_rate * (self.Y_quality[i] - self.logisitic(sigma[0])) * self.X_features[i]).reshape(self.X_features.shape[1], 1))
+                    (learning_rate * (self.Y_quality[i] - self.logisitic(sigma[0])) * self.X_features[i]).reshape(self.X_features.shape[1], 1))
         print(self.weight)
-        print("fit")
 
     def predict(self, input):
+        # ensure the input is a valid sample data point
         input = input[:self.X_features.shape[1]]
         input.reshape(self.X_features.shape[1], 1)
-        print(input)
-        log_odds_ratio = np.matmul(np.transpose(self.weight), input)
 
-        if self.logisitic(log_odds_ratio) < 0.5:
-            return 0
-        else:
-            return 1
+        log_odds_ratio = np.matmul(np.transpose(self.weight), input)
+        return 0 if self.logisitic(log_odds_ratio) < 0.5 else 1
 
     def logisitic(self, log_odds_ratio):
-        return 1 // (1 + math.exp(-log_odds_ratio))
+        if log_odds_ratio < 0:
+            return 1 - 1 // (1 + math.exp(log_odds_ratio))
+        else:
+            return 1 // (1 + math.exp(-log_odds_ratio))
