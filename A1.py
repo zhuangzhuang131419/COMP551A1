@@ -33,7 +33,9 @@ breast_cancer_data = breast_cancer_data[~np.isnan(breast_cancer_data).any(axis=1
 # print(red_wine_data[:,0:-1])
 
 ### Task2
-learning_rate = 1
-gradient_descent_iterations = 1
+learning_rate = 0.01
+gradient_descent_iterations = 1000
 logistic_regression = LR.LogisticRegression(red_wine_data, learning_rate, gradient_descent_iterations)
 logistic_regression.fit()
+for i in range(rows):
+    print(i, ":", logistic_regression.predict(red_wine_data[i]))
