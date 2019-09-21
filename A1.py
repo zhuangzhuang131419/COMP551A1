@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import numpy as np
-import pandas as pd
+import LogisticRegression as LR
 # Visualisation
 import matplotlib.pyplot as plt
 
@@ -10,7 +10,8 @@ red_wine_data = np.genfromtxt('wine/winequality-red.csv', delimiter =';', skip_h
 # red_wine_data = pd.read_csv('wine/winequality-red.csv', delimiter=';')
 breast_cancer_data = np.genfromtxt('breast/breast-cancer-wisconsin.data', delimiter = ',', skip_header = True)
 # breast_cancer_data = pd.read_csv('breast/breast-cancer-wisconsin.data', delimiter=',', header = None)
-
+# print(red_wine_data)
+# print(breast_cancer_data)
 
 # 2.Convert the wine dataset to a binary task
 # for index, row in red_wine_data.iterrows():
@@ -29,9 +30,10 @@ for i in range(rows):
 red_wine_data = red_wine_data[~np.isnan(red_wine_data).any(axis=1)]
 breast_cancer_data = breast_cancer_data[~np.isnan(breast_cancer_data).any(axis=1)]
 # 4.Compute some statistics on the data.
-print(red_wine_data)
+# print(red_wine_data[:,0:-1])
 
 ### Task2
-
-
-
+learning_rate = 1
+gradient_descent_iterations = 1
+logistic_regression = LR.LogisticRegression(red_wine_data, learning_rate, gradient_descent_iterations)
+logistic_regression.fit()
