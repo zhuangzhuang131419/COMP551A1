@@ -2,8 +2,8 @@ import numpy as np
 import math
 class LogisticRegression:
     def __init__(self, X_features, Y_quality):
-        # split the training data
-        self.X_features = X_features
+        # insert x0 = 1
+        self.X_features = np.insert(X_features, 0, values = 1, axis = 1)
         self.Y_quality = Y_quality
         self.weight = np.full((self.X_features.shape[1], 1), 1)
 
@@ -14,11 +14,12 @@ class LogisticRegression:
                 sigma = np.matmul(np.transpose(weight_old), np.transpose(self.X_features[i]))
                 self.weight = np.add(
                     self.weight,
-                    (learning_rate * (self.Y_quality[i] - self.logisitic(sigma[0])) * self.X_features[i]).reshape(self.X_features.shape[1], 1))
-        print(self.weight)
+                    (learning_rate * (self.Y_quality[i] - self.logisitic(sigma[0])) * self.X_features[i]).reshape(self.weight.shape[0], 1))
+        print(it, self.weight)
 
     def predict(self, input):
         target_evaluation = np.full((input.shape[0], 1), 0)
+        input = np.insert(input, 0, values=1, axis=1)
         for i in range(input.shape[0]):
             log_odds_ratio = np.matmul(np.transpose(self.weight), input[i].reshape(input[i].shape[0], 1))
             target_evaluation[i] = 0 if self.logisitic(log_odds_ratio) < 0.5 else 1

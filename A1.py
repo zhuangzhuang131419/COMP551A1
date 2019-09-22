@@ -35,13 +35,16 @@ breast_cancer_data = breast_cancer_data[~np.isnan(breast_cancer_data).any(axis=1
 ### Task2
 def evaluate_acc(X_feature, Y_true_label, Y_target_label):
     print("evaluate_accuracy")
+    # print("Y_true_label", Y_true_label.shape)
+    # print("Y_target_label", Y_target_label.shape)
     total = 0
     for i in range(Y_true_label.shape[0]):
-        if Y_true_label[i] == Y_target_label[i]:
+        # print(Y_true_label[i][0])
+        # print(Y_target_label[i][0])
+        if Y_true_label[i][0] == Y_target_label[i][0]:
             total = total + 1
+    print("total", total)
     return total / Y_true_label.shape[0]
-
-
 
 ### Task 3
 # implement with k-fold cross validation
@@ -56,8 +59,8 @@ def k_fold(data, k):
         logistic_regression_k_fold = LR.LogisticRegression(training_data[:, 0:-1], training_data[:, -1])
         logistic_regression_k_fold.fit(learning_rate, gradient_descent_iterations)
         logistic_regression_k_fold.predict(validation_data[:, 0:-1])
+        print(i, ":", evaluate_acc(data_subsets, validation_data[:, -1].reshape(validation_data.shape[0], 1), logistic_regression_k_fold.predict(validation_data[:, 0:-1])))
     return
 
 k_fold(red_wine_data, 5)
-# initialize the target array
-Y_quality_target = np.full((rows, 1), 0)
+# k_fold(breast_cancer_data, 5)
