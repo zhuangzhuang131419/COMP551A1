@@ -30,7 +30,7 @@ for i in range(rows):
 red_wine_data = red_wine_data[~np.isnan(red_wine_data).any(axis=1)]
 breast_cancer_data = breast_cancer_data[~np.isnan(breast_cancer_data).any(axis=1)]
 # 4.Compute some statistics on the data.
-# print(red_wine_data[:,0:-1])
+
 
 ### Task2
 def evaluate_acc(X_feature, Y_true_label, Y_target_label):
@@ -39,38 +39,25 @@ def evaluate_acc(X_feature, Y_true_label, Y_target_label):
     for i in range(Y_true_label.shape[0]):
         if Y_true_label[i] == Y_target_label[i]:
             total = total + 1
-    print(total)
     return total / Y_true_label.shape[0]
 
 
 
+### Task 3
 # implement with k-fold cross validation
-learning_rate = 0.001
+learning_rate = 0.01
 gradient_descent_iterations = 100
+def k_fold(data, k):
+    np.random.shuffle(data)
+    data_subsets = np.array_split(data, k, axis = 0)
+    for i in range(k):
+        training_data = np.concatenate(data_subsets[:i] + data_subsets[i + 1:], axis = 0)
+        validation_data = data_subsets[i]
+        logistic_regression_k_fold = LR.LogisticRegression(training_data[:, 0:-1], training_data[:, -1])
+        logistic_regression_k_fold.fit(learning_rate, gradient_descent_iterations)
+        logistic_regression_k_fold.predict(validation_data[:, 0:-1])
+    return
+
+k_fold(red_wine_data, 5)
 # initialize the target array
 Y_quality_target = np.full((rows, 1), 0)
-# for i in range(rows):
-#     # let ith row be test data
-#     X_features = red_wine_data[:, 0:-1]
-#     Y_quality = red_wine_data[:, -1]
-#     X_features_training = np.delete(X_features, i, axis = 0)
-#     Y_quality_training = np.delete(Y_quality, i, axis = 0)
-#
-#     logistic_regression = LR.LogisticRegression(X_features, Y_quality)
-#     logistic_regression.fit(learning_rate, gradient_descent_iterations)
-#
-#     Y_quality_target[i] = logistic_regression.predict(X_features[i])
-#
-# print(evaluate_acc(red_wine_data, Y_quality, Y_quality_target))
-
-
-logistic_regression = LR.LogisticRegression(red_wine_data[:, 0:-1], red_wine_data[:, -1])
-logistic_regression.fit(learning_rate, gradient_descent_iterations)
-for i in range(rows):
-    Y_quality_target[i] = logistic_regression.predict(red_wine_data[i])
-
-print(Y_quality_target)
-
-print(red_wine_data[:, -1].reshape(rows, 1))
-print(evaluate_acc(red_wine_data, red_wine_data[:, -1].reshape(rows, 1), Y_quality_target))
-# print(evaluate_acc(red_wine_data, red_wine_data[:, -1].reshape(rows, 1), Y_quality_target))

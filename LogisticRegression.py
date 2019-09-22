@@ -5,7 +5,7 @@ class LogisticRegression:
         # split the training data
         self.X_features = X_features
         self.Y_quality = Y_quality
-        self.weight = np.full((self.X_features.shape[1], 1), 0)
+        self.weight = np.full((self.X_features.shape[1], 1), 1)
 
     def fit(self, learning_rate, gradient_descent_iterations):
         for it in range(gradient_descent_iterations):
@@ -18,15 +18,14 @@ class LogisticRegression:
         print(self.weight)
 
     def predict(self, input):
-        # ensure the input is a valid sample data point
-        input = input[:self.X_features.shape[1]]
-        input.reshape(self.X_features.shape[1], 1)
-
-        log_odds_ratio = np.matmul(np.transpose(self.weight), input)
-        return 0 if self.logisitic(log_odds_ratio) < 0.5 else 1
+        target_evaluation = np.full((input.shape[0], 1), 0)
+        for i in range(input.shape[0]):
+            log_odds_ratio = np.matmul(np.transpose(self.weight), input[i].reshape(input[i].shape[0], 1))
+            target_evaluation[i] = 0 if self.logisitic(log_odds_ratio) < 0.5 else 1
+        return target_evaluation
 
     def logisitic(self, log_odds_ratio):
         if log_odds_ratio < 0:
-            return 1 - 1 // (1 + math.exp(log_odds_ratio))
+            return 1 - 1 / (1 + math.exp(log_odds_ratio))
         else:
-            return 1 // (1 + math.exp(-log_odds_ratio))
+            return 1 / (1 + math.exp(-log_odds_ratio))
