@@ -37,7 +37,7 @@ def k_fold(data, k):
 
 
 
-        # Regression
+        # # Regression
         # regr = linear_model.LinearRegression()
         # regr.fit(training_data[:, 0:-1], training_data[:, -1])
         # diabetes_y_pred = regr.predict(validation_data[:, 0:-1])
@@ -61,5 +61,5 @@ def evaluate_acc(Y_true_label, Y_target_label):
     print("total", total)
     return total / Y_true_label.shape[0]
 
-# k_fold(red_wine_data, 5)
-k_fold(breast_cancer_data, 5)
+k_fold(red_wine_data, 5)
+# k_fold(breast_cancer_data, 5)
