@@ -3,9 +3,18 @@ import math
 class LogisticRegression:
     def __init__(self, X_features, Y_quality):
         # insert x0 = 1
-        self.X_features = np.insert(X_features, 0, values = 1, axis = 1)
+        self.X_features = np.insert(X_features, 0, values=1, axis=1)
         self.Y_quality = Y_quality
         self.weight = np.full((self.X_features.shape[1], 1), 1)
+
+        # normalize the x_feature
+        # for i in range(self.X_features.shape[1]):
+        #     self.X_features[:, i] = self.normalize(self.X_features[:, i])
+
+    def normalize(self, x):
+        if max(x) == min(x):
+            return x
+        return (x - min(x)) / (max(x) - min(x))
 
     def fit(self, learning_rate, gradient_descent_iterations):
         for it in range(gradient_descent_iterations):
@@ -18,7 +27,7 @@ class LogisticRegression:
         print(it, self.weight)
 
     def predict(self, input):
-        target_evaluation = np.full((input.shape[0], 1), 0)
+        target_evaluation = np.full((input.shape[0], 1), -1)
         input = np.insert(input, 0, values=1, axis=1)
         for i in range(input.shape[0]):
             log_odds_ratio = np.matmul(np.transpose(self.weight), input[i].reshape(input[i].shape[0], 1))

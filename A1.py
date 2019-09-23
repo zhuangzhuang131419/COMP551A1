@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import numpy as np
 import LogisticRegression as LR
+import LinearDiscriminantAnalysis as LDA
 # Visualisation
 import matplotlib.pyplot as plt
 
@@ -19,12 +20,22 @@ breast_cancer_data = np.genfromtxt('breast/breast-cancer-wisconsin.data', delimi
 #         red_wine_data.loc[index, 'quality'] = 0
 #     else:
 #         red_wine_data.loc[index, 'quality'] = 1
-rows, cols = red_wine_data.shape
-for i in range(rows):
+
+for i in range(red_wine_data.shape[0]):
     if red_wine_data[i][-1] < 6:
         red_wine_data[i][-1] = 0
     else:
         red_wine_data[i][-1] = 1
+
+for i in range(breast_cancer_data.shape[0]):
+    if breast_cancer_data[i][-1] == 2:
+        breast_cancer_data[i][-1] = 0
+    else:
+        breast_cancer_data[i][-1] = 1
+
+# discard the first column(numerical order)
+breast_cancer_data = breast_cancer_data[:, 1:]
+
 
 # 3.Clean the data
 red_wine_data = red_wine_data[~np.isnan(red_wine_data).any(axis=1)]
@@ -35,15 +46,10 @@ breast_cancer_data = breast_cancer_data[~np.isnan(breast_cancer_data).any(axis=1
 ### Task2
 def evaluate_acc(X_feature, Y_true_label, Y_target_label):
     print("evaluate_accuracy")
-    # print("Y_true_label", Y_true_label.shape)
-    # print("Y_target_label", Y_target_label.shape)
     total = 0
     for i in range(Y_true_label.shape[0]):
-        # print(Y_true_label[i][0])
-        # print(Y_target_label[i][0])
-        if Y_true_label[i][0] == Y_target_label[i][0]:
+        if Y_true_label[i] == Y_target_label[i]:
             total = total + 1
-    print("total", total)
     return total / Y_true_label.shape[0]
 
 ### Task 3
@@ -56,11 +62,21 @@ def k_fold(data, k):
     for i in range(k):
         training_data = np.concatenate(data_subsets[:i] + data_subsets[i + 1:], axis = 0)
         validation_data = data_subsets[i]
-        logistic_regression_k_fold = LR.LogisticRegression(training_data[:, 0:-1], training_data[:, -1])
-        logistic_regression_k_fold.fit(learning_rate, gradient_descent_iterations)
-        logistic_regression_k_fold.predict(validation_data[:, 0:-1])
-        print(i, ":", evaluate_acc(data_subsets, validation_data[:, -1].reshape(validation_data.shape[0], 1), logistic_regression_k_fold.predict(validation_data[:, 0:-1])))
+        # logistic_regression_k_fold = LR.LogisticRegression(training_data[:, 0:-1], training_data[:, -1])
+        # logistic_regression_k_fold.fit(learning_rate, gradient_descent_iterations)
+        # y_perdict = logistic_regression_k_fold.predict(validation_data[:, 0:-1])
+
+        linear_discriminant_analysis_k_fold = LDA.LinearDiscriminantAnalysis(training_data[:, 0:-1], training_data[:, -1])
+        linear_discriminant_analysis_k_fold.fit()
+        y_perdict = linear_discriminant_analysis_k_fold.perfit(validation_data[:, 0:-1])
+
+        print(i, ":", evaluate_acc(data_subsets, validation_data[:, -1].reshape(validation_data.shape[0], 1), y_perdict))
     return
 
 k_fold(red_wine_data, 5)
+
+# linear_discriminant_analysis_k_fold = LDA.LinearDiscriminantAnalysis(red_wine_data[:, 0:-1], red_wine_data[:, -1])
+# linear_discriminant_analysis_k_fold.estimate_Py()
+# print(linear_discriminant_analysis_k_fold.estimate_u())
+
 # k_fold(breast_cancer_data, 5)
