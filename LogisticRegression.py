@@ -22,7 +22,13 @@ class LogisticRegression:
             return x
         return (x) / (max(x) - min(x))
 
-    def fit(self, learning_rate, gradient_descent_iterations):
+    def fit(self, start_learning_rate, end_learning_rate, gradient_descent_iterations):
+        self.gradient(start_learning_rate, gradient_descent_iterations)
+        self.gradient(start_learning_rate / 10, gradient_descent_iterations)
+        self.gradient(start_learning_rate / 100, gradient_descent_iterations)
+        self.gradient(start_learning_rate / 1000, gradient_descent_iterations)
+
+    def gradient(self, learning_rate, gradient_descent_iterations):
         for it in range(gradient_descent_iterations):
             weight_old = self.weight
             for i in range(self.X_features.shape[0]):

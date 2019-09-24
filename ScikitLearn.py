@@ -29,18 +29,18 @@ def k_fold(data, k):
         validation_data = data_subsets[i]
 
         # LDA
-        clf = LinearDiscriminantAnalysis()
-        # print("trainingX", training_data[:, 0:-1])
-        # print("trainingY", training_data[:, -1])
-        clf.fit(training_data[:, 0:-1], training_data[:, -1])
-        diabetes_y_pred = clf.predict(validation_data[:, 0:-1])
+        # clf = LinearDiscriminantAnalysis()
+        # # print("trainingX", training_data[:, 0:-1])
+        # # print("trainingY", training_data[:, -1])
+        # clf.fit(training_data[:, 0:-1], training_data[:, -1])
+        # diabetes_y_pred = clf.predict(validation_data[:, 0:-1])
 
 
 
         # # Regression
-        # regr = linear_model.LinearRegression()
-        # regr.fit(training_data[:, 0:-1], training_data[:, -1])
-        # diabetes_y_pred = regr.predict(validation_data[:, 0:-1])
+        regr = linear_model.LinearRegression()
+        regr.fit(training_data[:, 0:-1], training_data[:, -1])
+        diabetes_y_pred = regr.predict(validation_data[:, 0:-1])
 
         # for i in diabetes_y_pred.shape[1]:
         #     if diabetes_y_pred[i] <
