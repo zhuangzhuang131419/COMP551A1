@@ -9,24 +9,14 @@ class LogisticRegression:
         # print(self.X_features)
         # self.X_features = X_features
         self.Y_quality = Y_quality
-        self.weight = np.full((self.X_features.shape[1], 1), 0)
-
-        # normalize the x_feature
-        # for i in range(self.X_features.shape[1]):
-        #     self.X_features[:, i] = self.normalize(self.X_features[:, i])
-
-        # print(self.X_features)
-
-    def normalize(self, x):
-        if max(x) == min(x):
-            return x
-        return (x) / (max(x) - min(x))
+        self.weight = np.full((self.X_features.shape[1], 1), 1)
 
     def fit(self, start_learning_rate, end_learning_rate, gradient_descent_iterations):
         self.gradient(start_learning_rate, gradient_descent_iterations)
-        self.gradient(start_learning_rate / 10, gradient_descent_iterations)
-        self.gradient(start_learning_rate / 100, gradient_descent_iterations)
-        self.gradient(start_learning_rate / 1000, gradient_descent_iterations)
+        self.gradient(end_learning_rate, gradient_descent_iterations)
+        # self.gradient(start_learning_rate / 10, gradient_descent_iterations)
+        # self.gradient(start_learning_rate / 100, gradient_descent_iterations)
+        # self.gradient(start_learning_rate / 1000, gradient_descent_iterations)
 
     def gradient(self, learning_rate, gradient_descent_iterations):
         for it in range(gradient_descent_iterations):
