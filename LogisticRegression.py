@@ -21,9 +21,12 @@ class LogisticRegression:
     def gradient(self, learning_rate, gradient_descent_iterations):
         for it in range(gradient_descent_iterations):
             weight_old = self.weight
+#            gradient = 0
             for i in range(self.X_features.shape[0]):
                 sigma = np.dot(np.transpose(weight_old), np.transpose(self.X_features[i]))
+#                gradient = gradient + (self.Y_quality[i] - self.logisitic(sigma)) * (self.X_features[i]).reshape(self.weight.shape[0], 1)
                 self.weight = self.weight + learning_rate * (self.Y_quality[i] - self.logisitic(sigma)) * (self.X_features[i]).reshape(self.weight.shape[0], 1)
+#            self.weight = self.weight + gradient * learning_rate
         # print(it, self.weight)
 
     def predict(self, input):

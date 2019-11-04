@@ -35,7 +35,6 @@ class LinearDiscriminantAnalysis:
         # estimate u
         self.u0 = [0] * (np.size(self.X_features, 1))
         self.u1 = [0] * (np.size(self.X_features, 1))
-
         class0 = []
         class1 = []
 
